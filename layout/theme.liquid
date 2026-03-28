@@ -5,7 +5,19 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="theme-color" content="">
-    <link rel="canonical" href="{{ canonical_url }}">
+    <meta name="google-site-verification" content="JZ9NFdzeeCFZf5-1GfgcykauhPmvXb2uu7eik8_94Gc">
+    <meta name="google-site-verification" content="ra0PY9TZlR5AUqS6V0CPUT3updfVeq0h-jz4lLOn8mY">
+    <meta name="facebook-domain-verification" content="ylfxq7dvh0de3bwhzn8r4ce16jw7eo">
+    <meta name="p:domain_verify" content="aefe6423e06783dce0ec3669da96be22">
+    <meta name="2cf9ae026b5c4cd4be9334eca7254706.txt" content="2cf9ae026b5c4cd4be9334eca7254706">
+    <!-- Canonical Tag -->
+    {% if product.metafields.global.canonical != blank %}
+      <link rel="canonical" href="{{ product.metafields.global.canonical }}">
+    {% elsif request.page_type != 'search' and request.query.page == blank %}
+      <link rel="canonical" href="https://naturallyyou.ca{{ request.path | escape }}">
+    {% else %}
+      <link rel="canonical" href="{{ canonical_url }}">
+    {% endif %}
 
     {%- if settings.favicon != blank -%}
       <link rel="icon" type="image/png" href="{{ settings.favicon | image_url: width: 32, height: 32 }}">
@@ -296,9 +308,321 @@
         document.documentElement.classList.add('shopify-design-mode');
       }
     </script>
+
+    <!-- Microsoft Clarity -->
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        var clarityScript = document.createElement("script");
+        clarityScript.type = "text/javascript";
+        clarityScript.async = true;
+        clarityScript.src = "https://www.clarity.ms/tag/nlfurt8pj5";
+        document.head.appendChild(clarityScript);
+
+        window.clarity = window.clarity || function () {
+          (window.clarity.q = window.clarity.q || []).push(arguments);
+        };
+      });
+    </script>
+
+    <!-- Ahrefs Analytics -->
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        var ahrefsScript = document.createElement("script");
+        ahrefsScript.src = "https://analytics.ahrefs.com/analytics.js";
+        ahrefsScript.async = true;
+        ahrefsScript.setAttribute("data-key", "GVA4fNDdlF2O9auGpS7zoA");
+        document.head.appendChild(ahrefsScript);
+      });
+    </script>
   </head>
 
   <body class="gradient{% if settings.animations_hover_elements != 'none' %} animate--hover-{{ settings.animations_hover_elements }}{% endif %}">
+    <!-- LD+JSON Structured Data -->
+    {%- comment -%}
+      LocalBusiness JSON-LD (homepage only).
+    {%- endcomment -%}
+    {%- if request.page_type == 'index' -%}
+      {%- liquid
+        assign business_id = shop.url | append: '#localbusiness'
+        assign street = shop.address.address1
+        if shop.address.address2 != blank
+          assign street = street | append: ', ' | append: shop.address.address2
+        endif
+
+        assign logo_url = ''
+        if settings.logo != blank
+          assign logo_url = settings.logo | image_url: width: 1200
+          if logo_url contains '//'
+          else
+            assign logo_url = logo_url | prepend: 'https:'
+          endif
+        endif
+      -%}
+      <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@id": {{ business_id | default: shop.url | json }},
+        "@type": ["Store", "HealthAndBeautyBusiness", "LocalBusiness"],
+        "name": {{ shop.name | json }},
+        "url": {{ shop.url | json }},
+        "telephone": {{ shop.phone | json }},
+        "email": {{ shop.email | json }},
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": {{ street | json }},
+          "addressLocality": {{ shop.address.city | json }},
+          "addressRegion": {{ shop.address.province_code | default: shop.address.province | json }},
+          "postalCode": {{ shop.address.zip | json }},
+          "addressCountry": {{ shop.address.country_code | default: shop.address.country | json }}
+        },
+        "geo": {
+          "@type": "GeoCoordinates",
+          "latitude": 44.329269,
+          "longitude": -79.686050
+        }
+        {%- if logo_url != blank -%},
+        "logo": {{ logo_url | json }},
+        "image": [{{ logo_url | json }}]
+        {%- endif -%},
+        {%- capture same_as -%}
+          {%- assign first = true -%}
+          {%- if settings.social_facebook_link != blank -%}{{ settings.social_facebook_link | json }}{%- assign first = false -%}{%- endif -%}
+          {%- if settings.social_instagram_link != blank -%}{%- unless first -%},{%- endunless -%}{{ settings.social_instagram_link | json }}{%- assign first = false -%}{%- endif -%}
+          {%- if settings.social_tiktok_link != blank -%}{%- unless first -%},{%- endunless -%}{{ settings.social_tiktok_link | json }}{%- assign first = false -%}{%- endif -%}
+          {%- if settings.social_youtube_link != blank -%}{%- unless first -%},{%- endunless -%}{{ settings.social_youtube_link | json }}{%- assign first = false -%}{%- endif -%}
+          {%- if settings.social_pinterest_link != blank -%}{%- unless first -%},{%- endunless -%}{{ settings.social_pinterest_link | json }}{%- assign first = false -%}{%- endif -%}
+        {%- endcapture -%}
+        "sameAs": [{{ same_as }}],
+        "openingHours": "Tu-Fr 09:50-17:30, Sa 10:00-17:00",
+        "description": {{ "Canada's certified mastectomy fitting specialists. Expert fitters in breast forms, mastectomy bras, wigs, and post-surgical care. In-store in Barrie, ON and virtual fittings across Canada." | json }},
+        "priceRange": "$$",
+        "areaServed": "Canada",
+        "hasOfferCatalog": {
+          "@type": "OfferCatalog",
+          "name": "Post-Mastectomy Products and Fitting Services"
+        }
+      }
+      </script>
+    {%- endif -%}
+
+    {%- if template contains 'collection' -%}
+      <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "CollectionPage",
+        "name": {{ collection.title | escape | json }},
+        "url": {{ shop.url | append: collection.url | json }},
+        "description": {{ collection.description | strip_html | escape | json }},
+        "mainEntity": {
+          "@type": "ItemList",
+          "itemListElement": [
+            {%- for product in collection.products limit: 20 -%}
+              {
+                "@type": "ListItem",
+                "position": {{ forloop.index }},
+                "url": {{ shop.url | append: product.url | json }}
+              }{% unless forloop.last %},{% endunless %}
+            {%- endfor -%}
+          ]
+        }
+      }
+      </script>
+    {%- endif -%}
+
+    {%- if template contains 'product' -%}
+      {%- assign fa_product_id_alpha2_code = 'CA' -%}
+      {%- assign fa_product_id = 'default' -%}
+      {%- assign fa_return_days = 30 -%}
+      {%- if cart.currency.iso_code == 'CAD' %}
+        {%- assign fa_shipping_currency = 'CAD' -%}
+        {%- if fa_product_price >= '125' %}
+          {%- assign fa_shipping_price = 0.00 -%}
+        {%- else -%}
+          {%- assign fa_shipping_price = 15 -%}
+        {%- endif -%}
+      {%- endif -%}
+      {%- assign fa_shipping_handling_time_min = 3 -%}
+      {%- assign fa_shipping_handling_time_max = 5 -%}
+      {%- assign fa_shipping_shipping_time_min = 3 -%}
+      {%- assign fa_shipping_shipping_time_max = 9 -%}
+      {%- assign fa_returns = 'false' -%}
+      {%- assign fa_shipping = 'true' -%}
+      {%- assign fa_current_variant = product.selected_or_first_available_variant -%}
+      {%- if fa_product_id == 'default' -%}
+        {%- capture fa_product_id_value -%}shopify_{{ fa_product_id_alpha2_code }}_{{ product.id }}_{{ fa_current_variant.id }}{%- endcapture -%}
+      {%- elsif fa_product_id == 'product_id' -%}
+        {%- capture fa_product_id_value -%}{{ fa_current_variant.id }}{%- endcapture -%}
+      {%- elsif fa_product_id == 'parent_id' -%}
+        {%- capture fa_product_id_value -%}{{ product.id }}{%- endcapture -%}
+      {%- elsif fa_product_id == 'sku' -%}
+        {%- capture fa_product_id_value -%}{{ fa_current_variant.sku | escape }}{%- endcapture -%}
+      {%- endif -%}
+      {%- assign fa_product_price = fa_current_variant.price | money_without_currency | remove: ',' -%}
+      {%- assign fa_product_price_number = fa_product_price | plus: 0 -%}
+      {% assign current_day = 'now' | date: '%w' %}
+      {% if current_day == '5' %}
+        {% assign days_to_add = 4 %}
+      {% elsif current_day == '6' %}
+        {% assign days_to_add = 3 %}
+      {% else %}
+        {% assign days_to_add = 2 %}
+      {% endif %}
+      {% assign seconds_to_add = days_to_add | times: 86400 %}
+      <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Product",
+        "@id": {{ canonical_url | append: '#product' | json }},
+        "name": {{ product.title | strip_html | json }},
+        "url": {{ shop.url | append: product.url | json }},
+        "sku": {{ fa_product_id_value | json }},
+        "gtin": "{{ product.variants.first.barcode }}",
+        {%- assign bc_raw = fa_current_variant.barcode | default: product.variants.first.barcode -%}
+        {%- assign bc = bc_raw | strip | replace: ' ', '' | replace: '-', '' -%}
+        {%- if bc != blank -%}
+          {%- case bc | size -%}
+            {%- when 8 -%}"gtin8": {{ bc | json }},
+            {%- when 12 -%}"gtin12": {{ bc | json }},
+            {%- when 13 -%}"gtin13": {{ bc | json }},
+            {%- when 14 -%}"gtin14": {{ bc | json }},
+          {%- endcase -%}
+        {%- endif -%}
+        "productID": {{ product.id | json }},
+        "brand": { "@type": "Brand", "name": {{ product.vendor | json }} },
+        "category": {{ product.type | json }},
+        "description": {{ product.description | strip_html | truncate: 220 | json }},
+        "image": {{ product.featured_image | image_url: width: 1500 | prepend: 'https:' | json }},
+        {%- if product.metafields.custom.material_single_line != blank -%}
+        "material": {{ product.metafields.custom.material_single_line | strip_html | json }},
+        {%- endif -%}
+        "offers": {
+          "@type": "Offer",
+          "priceCurrency": {{ shop.currency | json }},
+          "price": {{ fa_product_price_number }},
+          "priceValidUntil": "{{ 'now' | date: '%s' | plus: 31536000 | date: '%Y-%m-%d' }}",
+          "itemCondition": "https://schema.org/NewCondition",
+          "availability": "https://schema.org/{% if fa_current_variant.inventory_management == false or fa_current_variant.inventory_quantity >= 1 %}InStock{% elsif fa_current_variant.inventory_policy == 'continue' %}BackOrder{% else %}OutOfStock{% endif %}",
+          {%- if fa_current_variant.inventory_policy == 'continue' and fa_current_variant.inventory_quantity <= 0 -%}
+            {%- assign tz = 'now' | date: '%z' -%}
+            {%- assign tz0 = tz | slice: 0, 3 -%}
+            {%- assign tz1 = tz | slice: 3, 2 -%}
+            {%- assign tz_colon = tz0 | append: ':' | append: tz1 -%}
+            "availabilityStarts": "{{ 'now' | date: '%s' | plus: seconds_to_add | date: '%Y-%m-%dT%H:%M:%S' }}{{ tz_colon }}",
+          {%- endif -%}
+          "hasMerchantReturnPolicy": {
+            "@type": "MerchantReturnPolicy",
+            "applicableCountry": {{ fa_product_id_alpha2_code | json }},
+            "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
+            "merchantReturnDays": {{ fa_return_days }},
+            "returnMethod": "https://schema.org/ReturnByMail",
+            "returnFees": "https://schema.org/FreeReturn",
+            "refundType": "https://schema.org/FullRefund"
+          }
+          {%- if fa_shipping == 'true' -%}
+          , "shippingDetails": {
+            "@type": "OfferShippingDetails",
+            "shippingRate": {
+              "@type": "MonetaryAmount",
+              "value": {{ fa_shipping_price }},
+              "currency": {{ fa_shipping_currency | json }}
+            },
+            "weight": {
+              "@type": "QuantitativeValue",
+              "value": {{ product.variants.first.weight_in_unit | default: product.variants.first.weight | json }},
+              "unitText": {{ product.variants.first.weight_unit | json }}
+            },
+            "shippingDestination": {
+              "@type": "DefinedRegion",
+              "addressCountry": "{{ fa_product_id_alpha2_code }}"
+            },
+            "deliveryTime": {
+              "@type": "ShippingDeliveryTime",
+              "handlingTime": {
+                "@type": "QuantitativeValue",
+                "minValue": {{ fa_shipping_handling_time_min }},
+                "maxValue": {{ fa_shipping_handling_time_max }},
+                "unitCode": "DAY"
+              },
+              "transitTime": {
+                "@type": "QuantitativeValue",
+                "minValue": {{ fa_shipping_shipping_time_min }},
+                "maxValue": {{ fa_shipping_shipping_time_max }},
+                "unitCode": "DAY"
+              }
+            }
+          }
+          {%- endif -%}
+        },
+        "additionalProperty": [
+          {
+            "@type": "PropertyValue",
+            "propertyID": "item_group_id",
+            "value": {{ product.id | json }}
+          }
+          {%- assign greatfor_html = product.metafields.custom.intended_use | metafield_tag
+            | replace: '<div class="metafield-rich_text_field">', ''
+            | replace: '</div>', ''
+            | replace: '<ul>', ''
+            | replace: '</ul>', ''
+            | strip_newlines -%}
+          {%- assign greatfor_list = greatfor_html | split: '</li>' -%}
+          {%- for gf in greatfor_list -%}
+            {%- assign g = gf | remove: '<li>' | strip | strip_html -%}
+            {%- if g != blank -%},
+            {
+              "@type": "PropertyValue",
+              "name": "Intended Use",
+              "value": {{ g | escape | json }}
+            }
+            {%- endif -%}
+          {%- endfor -%}
+          {%- assign features_html = product.metafields.custom.features_benefits | metafield_tag
+            | replace: '<div class="metafield-rich_text_field">', ''
+            | replace: '</div>', ''
+            | replace: '<ul>', ''
+            | replace: '</ul>', ''
+            | strip_newlines -%}
+          {%- assign features_list = features_html | split: '</li>' -%}
+          {%- for feature in features_list -%}
+            {%- assign f = feature | remove: '<li>' | strip | strip_html -%}
+            {%- if f != blank -%},
+            {
+              "@type": "PropertyValue",
+              "name": "Feature",
+              "value": {{ f | escape | json }}
+            }
+            {%- endif -%}
+          {%- endfor -%}
+          {%- assign care_html = product.metafields.custom.care_guide | metafield_tag
+            | replace: '<div class="metafield-rich_text_field">', ''
+            | replace: '</div>', ''
+            | replace: '<ul>', ''
+            | replace: '</ul>', ''
+            | strip_newlines -%}
+          {%- assign care_list = care_html | split: '</li>' -%}
+          {%- for care in care_list -%}
+            {%- assign c = care | remove: '<li>' | strip | strip_html -%}
+            {%- if c != blank -%},
+            {
+              "@type": "PropertyValue",
+              "name": "Care",
+              "value": {{ c | escape | json }}
+            }
+            {%- endif -%}
+          {%- endfor -%}
+          {%- if product.metafields.custom.material_single_line != blank -%},
+          {
+            "@type": "PropertyValue",
+            "name": "Material",
+            "value": {{ product.metafields.custom.material_single_line | strip_html | json }}
+          }
+          {%- endif -%}
+        ]
+      }
+      </script>
+    {%- endif -%}
+    <!-- End LD+JSON Structured Data -->
+
     <a class="skip-to-content-link button visually-hidden" href="#MainContent">
       {{ 'accessibility.skip_to_text' | t }}
     </a>
@@ -372,5 +696,27 @@
     {%- if settings.cart_type == 'drawer' -%}
       <script src="{{ 'cart-drawer.js' | asset_url }}" defer="defer"></script>
     {%- endif -%}
+
+    <!-- Google Customer Reviews Badge -->
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        window.renderBadge = function () {
+          var ratingBadgeContainer = document.createElement("div");
+          document.body.appendChild(ratingBadgeContainer);
+          window.gapi.load("ratingbadge", function () {
+            window.gapi.ratingbadge.render(ratingBadgeContainer, {
+              merchant_id: 5344532394,
+              position: "INLINE",
+            });
+          });
+        };
+
+        var gPlatform = document.createElement("script");
+        gPlatform.src = "https://apis.google.com/js/platform.js?onload=renderBadge";
+        gPlatform.async = true;
+        gPlatform.defer = true;
+        document.head.appendChild(gPlatform);
+      });
+    </script>
   </body>
 </html>
